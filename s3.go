@@ -21,10 +21,11 @@ import (
 var keyRegex = regexp.MustCompile("[^a-zA-Z0-9]+")
 
 type s3Store struct {
-	client   *minio.Client
-	opts     store.Options
-	endpoint string
-	mopts    *minio.Options
+	client    *minio.Client
+	opts      store.Options
+	endpoint  string
+	mopts     *minio.Options
+	connected bool
 }
 
 func getBucket(ctx context.Context) string {
@@ -43,14 +44,17 @@ func NewStore(opts ...store.Option) store.Store {
 }
 
 func (s *s3Store) Connect(ctx context.Context) error {
-	if s.client == nil {
-		client, err := minio.New(s.endpoint, s.mopts)
-		if err != nil {
-			return fmt.Errorf("Error connecting to store: %w", err)
-		}
-
-		s.client = client
+	if s.connected {
+		return nil
 	}
+
+	client, err := minio.New(s.endpoint, s.mopts)
+	if err != nil {
+		return fmt.Errorf("Error connecting to store: %w", err)
+	}
+
+	s.client = client
+	s.connected = true
 
 	return nil
 }
@@ -65,7 +69,7 @@ func (s *s3Store) Init(opts ...store.Option) error {
 	}
 
 	var akey, skey string
-	var endpoint string
+	endpoint := s.endpoint
 
 	if s.opts.Context != nil {
 		if v, ok := s.opts.Context.Value(accessKey{}).(string); ok && v != "" {

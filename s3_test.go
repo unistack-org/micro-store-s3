@@ -5,6 +5,8 @@ import (
 	"context"
 	"os"
 	"testing"
+
+	"github.com/unistack-org/micro/v3"
 )
 
 func TestStore(t *testing.T) {
@@ -24,8 +26,16 @@ func TestStore(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	if err := s.Init(); err != nil {
+		t.Fatalf("double init test failed: %v", err)
+	}
+
 	if err := s.Connect(ctx); err != nil {
 		t.Fatal(err)
+	}
+
+	if err := s.Connect(ctx); err != nil {
+		t.Fatalf("double connect test failed: %v", err)
 	}
 
 	defer func() {
@@ -33,6 +43,11 @@ func TestStore(t *testing.T) {
 			t.Fatal(err)
 		}
 	}()
+
+	svc := micro.NewService(micro.Store(s))
+	if err := svc.Init(); err != nil {
+		t.Fatalf("service init failed: %v", err)
+	}
 
 	val := []byte("test")
 	key := "key"
