@@ -44,7 +44,7 @@ func TestStore(t *testing.T) {
 		}
 	}()
 
-	svc := micro.NewService(micro.Store(s))
+	svc := micro.NewService(micro.Stores(s))
 	if err := svc.Init(); err != nil {
 		t.Fatalf("service init failed: %v", err)
 	}

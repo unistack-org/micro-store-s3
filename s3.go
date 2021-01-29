@@ -302,3 +302,7 @@ func (s *s3Store) List(ctx context.Context, opts ...store.ListOption) ([]string,
 func (s *s3Store) String() string {
 	return "s3"
 }
+
+func (s *s3Store) Name() string {
+	return s.opts.Name
+}
