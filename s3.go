@@ -69,7 +69,7 @@ func (s *s3Store) Init(opts ...store.Option) error {
 	}
 
 	var akey, skey string
-	var region string
+	region := "us-east-1"
 	endpoint := s.endpoint
 
 	if s.opts.Context != nil {

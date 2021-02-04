@@ -6,6 +6,8 @@ import (
 	"os"
 	"testing"
 
+	"github.com/google/uuid"
+	"github.com/minio/minio-go/v7"
 	"github.com/unistack-org/micro/v3"
 )
 
@@ -52,22 +54,23 @@ func TestStore(t *testing.T) {
 	val := []byte("test")
 	key := "key"
 
-	if err := s.Write(ctx, key, val, WriteBucket("micro-store-s3"), ContentType("text/plain")); err != nil {
+	bucket := "micro-store-s3-" + uuid.New().String()
+	if err := s.Write(ctx, key, val, WriteBucket(bucket), ContentType("text/plain")); err != nil {
 		t.Fatal(err)
 	}
 	val = nil
 
-	if err := s.Exists(ctx, key, ExistsBucket("micro-store-s3")); err != nil {
+	if err := s.Exists(ctx, key, ExistsBucket(bucket)); err != nil {
 		t.Fatal(err)
 	}
 
-	if err := s.Read(ctx, key, &val, ReadBucket("micro-store-s3")); err != nil {
+	if err := s.Read(ctx, key, &val, ReadBucket(bucket)); err != nil {
 		t.Fatal(err)
 	} else if !bytes.Equal(val, []byte("test")) {
 		t.Fatalf("read bytes are not equal %s != %s", val, "test")
 	}
 
-	names, err := s.List(ctx, ListBucket("micro-store-s3"))
+	names, err := s.List(ctx, ListBucket(bucket))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -83,4 +86,25 @@ func TestStore(t *testing.T) {
 		t.Fatalf("key not found in %v", names)
 	}
 
+	objectsCh := make(chan minio.ObjectInfo)
+	minioClient := s.(*s3Store).client
+	// Send object names that are needed to be removed to objectsCh
+	go func() {
+		defer close(objectsCh)
+		// List all objects from a bucket-name with a matching prefix.
+		for object := range minioClient.ListObjects(context.Background(), bucket, minio.ListObjectsOptions{Recursive: true}) {
+			if object.Err != nil {
+				t.Fatal(object.Err)
+			}
+			objectsCh <- object
+		}
+	}()
+
+	opts := minio.RemoveObjectsOptions{
+		GovernanceBypass: true,
+	}
+
+	for rErr := range minioClient.RemoveObjects(context.Background(), bucket, objectsCh, opts) {
+		t.Fatalf("Error detected during deletion: %v", rErr)
+	}
 }
