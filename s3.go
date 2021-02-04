@@ -69,6 +69,7 @@ func (s *s3Store) Init(opts ...store.Option) error {
 	}
 
 	var akey, skey string
+	var region string
 	endpoint := s.endpoint
 
 	if s.opts.Context != nil {
@@ -81,6 +82,10 @@ func (s *s3Store) Init(opts ...store.Option) error {
 		if v, ok := s.opts.Context.Value(endpointKey{}).(string); ok && v != "" {
 			endpoint = v
 		}
+		if v, ok := s.opts.Context.Value(regionKey{}).(string); ok && v != "" {
+			region = v
+		}
+
 	}
 
 	if len(akey) > 0 && len(skey) > 0 {
@@ -110,6 +115,7 @@ func (s *s3Store) Init(opts ...store.Option) error {
 		ts.TLSClientConfig = s.opts.TLSConfig
 	}
 	s.mopts.Transport = ts
+	s.mopts.Region = region
 
 	s.endpoint = endpoint
 
@@ -186,12 +192,7 @@ func (s *s3Store) Write(ctx context.Context, key string, val interface{}, opts .
 		bucket = options.Namespace
 	}
 
-	var region string
 	mputopts := minio.PutObjectOptions{}
-
-	if v, ok := s.opts.Context.Value(regionKey{}).(string); ok && v != "" {
-		region = v
-	}
 
 	if options.Context != nil {
 		if v, ok := options.Context.Value(contentTypeKey{}).(string); ok && v != "" {
@@ -211,7 +212,7 @@ func (s *s3Store) Write(ctx context.Context, key string, val interface{}, opts .
 	if ok, err := s.client.BucketExists(ctx, bucket); err != nil {
 		return err
 	} else if !ok {
-		opts := minio.MakeBucketOptions{Region: region}
+		opts := minio.MakeBucketOptions{Region: s.mopts.Region}
 		if err := s.client.MakeBucket(ctx, bucket, opts); err != nil {
 			return err
 		}
