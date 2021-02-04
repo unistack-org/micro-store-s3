@@ -81,6 +81,27 @@ func (s *s3Store) Init(opts ...store.Option) error {
 		}
 		if v, ok := s.opts.Context.Value(endpointKey{}).(string); ok && v != "" {
 			endpoint = v
+			var secure bool
+
+			if strings.HasPrefix(endpoint, "https://") || s.opts.TLSConfig != nil {
+				secure = true
+			}
+
+			if u, err := url.Parse(endpoint); err == nil && u.Host != "" {
+				endpoint = u.Host
+			}
+
+			ts, err := minio.DefaultTransport(secure)
+			if err != nil {
+				return fmt.Errorf("init error: %w", err)
+			}
+			if s.opts.TLSConfig != nil {
+				ts.TLSClientConfig = s.opts.TLSConfig
+			}
+
+			s.mopts.Transport = ts
+			s.mopts.Secure = secure
+			s.endpoint = endpoint
 		}
 		if v, ok := s.opts.Context.Value(regionKey{}).(string); ok && v != "" {
 			region = v
@@ -92,32 +113,7 @@ func (s *s3Store) Init(opts ...store.Option) error {
 		s.mopts.Creds = creds.NewStaticV2(akey, skey, "")
 	}
 
-	if len(endpoint) == 0 {
-		return fmt.Errorf("missing Endpoint option")
-	}
-
-	var secure bool
-
-	if strings.HasPrefix(endpoint, "https://") || s.opts.TLSConfig != nil {
-		secure = true
-	}
-
-	if u, err := url.Parse(endpoint); err == nil && u.Host != "" {
-		endpoint = u.Host
-	}
-
-	ts, err := minio.DefaultTransport(secure)
-	if err != nil {
-		return fmt.Errorf("init error: %w", err)
-	}
-
-	if s.opts.TLSConfig != nil {
-		ts.TLSClientConfig = s.opts.TLSConfig
-	}
-	s.mopts.Transport = ts
 	s.mopts.Region = region
-
-	s.endpoint = endpoint
 
 	return nil
 }
