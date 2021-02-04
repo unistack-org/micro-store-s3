@@ -6,5 +6,5 @@ require (
 	github.com/gabriel-vasile/mimetype v1.1.2
 	github.com/google/uuid v1.1.5
 	github.com/minio/minio-go/v7 v7.0.7
-	github.com/unistack-org/micro/v3 v3.2.0
+	github.com/unistack-org/micro/v3 v3.2.6
 )
