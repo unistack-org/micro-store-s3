@@ -46,6 +46,7 @@ github.com/gopherjs/gopherjs v0.0.0-20181017120253-0766667cb4d1/go.mod h1:wJfORR
 github.com/heimdalr/dag v1.0.1/go.mod h1:t+ZkR+sjKL4xhlE1B9rwpvwfo+x+2R0363efS+Oghns=
 github.com/imdario/mergo v0.3.11 h1:3tnifQM4i+fbajXKBHXWEH+KvNHqojZ778UH75j3bGA=
 github.com/imdario/mergo v0.3.11/go.mod h1:jmQim1M+e3UYxmgPu/WyfjB3N3VflVyUjjjwH0dnCYA=
+github.com/imdario/mergo v0.3.12/go.mod h1:jmQim1M+e3UYxmgPu/WyfjB3N3VflVyUjjjwH0dnCYA=
 github.com/json-iterator/go v1.1.10 h1:Kz6Cvnvv2wGdaG/V8yMvfkmNiXq9Ya2KUv4rouJJr68=
 github.com/json-iterator/go v1.1.10/go.mod h1:KdQUCv79m/52Kvf8AW2vK1V8akMuk1QjK/uOdHXbAo4=
 github.com/jtolds/gls v4.20.0+incompatible h1:xdiiI2gbIgH/gLH7ADydsJ1uDOEzR8yvV7C0MuV77Wo=
@@ -124,6 +125,8 @@ github.com/unistack-org/micro/v3 v3.2.17/go.mod h1:y+fV+BPNK2IqGoLquRU396jTYifG0
 github.com/unistack-org/micro/v3 v3.2.18/go.mod h1:y+fV+BPNK2IqGoLquRU396jTYifG0HCw3zxFfI4E0dc=
 github.com/unistack-org/micro/v3 v3.2.20 h1:EY94FDfHR43QvKNjmCaVH8/7+D8bmLwySXbFK9iIQY0=
 github.com/unistack-org/micro/v3 v3.2.20/go.mod h1:y+fV+BPNK2IqGoLquRU396jTYifG0HCw3zxFfI4E0dc=
+github.com/unistack-org/micro/v3 v3.2.22 h1:AXyLtRpfcPGczhaA1f9KR0ctK+1Zpqvb+rBJrZtp3Oo=
+github.com/unistack-org/micro/v3 v3.2.22/go.mod h1:oI8H/uGq1h4i5cvUycEoFKJQC7G8yChZQNIDNWGSLRU=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
 golang.org/x/crypto v0.0.0-20190513172903-22d7a77e9e5f/go.mod h1:yigFU9vqHzYiE8UmvKecakEJjdnWj3jj499lnFckfCI=
 golang.org/x/crypto v0.0.0-20191011191535-87dc89f01550/go.mod h1:yigFU9vqHzYiE8UmvKecakEJjdnWj3jj499lnFckfCI=
