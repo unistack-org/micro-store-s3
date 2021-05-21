@@ -189,10 +189,13 @@ func (s *s3Store) Write(ctx context.Context, key string, val interface{}, opts .
 	}
 
 	mputopts := minio.PutObjectOptions{}
-
+	writeSize := int64(-1)
 	if options.Context != nil {
 		if v, ok := options.Context.Value(contentTypeKey{}).(string); ok && v != "" {
 			mputopts.ContentType = v
+		}
+		if v, ok := options.Context.Value(writeSizeKey{}).(int64); ok && v > 0 {
+			writeSize = v
 		}
 	}
 
@@ -214,7 +217,7 @@ func (s *s3Store) Write(ctx context.Context, key string, val interface{}, opts .
 		}
 	}
 
-	_, err := s.client.PutObject(ctx, bucket, key, r, int64(-1), mputopts)
+	_, err := s.client.PutObject(ctx, bucket, key, r, writeSize, mputopts)
 	return err
 }
 

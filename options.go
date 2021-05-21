@@ -44,6 +44,13 @@ func WriteBucket(bucket string) store.WriteOption {
 	return store.SetWriteOption(bucketKey{}, bucket)
 }
 
+type writeSizeKey struct{}
+
+// WriteSize key values size hint
+func WriteSize(size int64) store.WriteOption {
+	return store.SetWriteOption(writeSizeKey{}, size)
+}
+
 // DeleteBucket sets the bucket name option
 func DeleteBucket(bucket string) store.DeleteOption {
 	return store.SetDeleteOption(bucketKey{}, bucket)
