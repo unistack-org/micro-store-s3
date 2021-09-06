@@ -54,7 +54,11 @@ func TestStore(t *testing.T) {
 	val := []byte("test")
 	key := "key"
 
-	bucket := "micro-store-s3-" + id.New()
+	uid, err := id.New()
+	if err != nil {
+		t.Fatal(err)
+	}
+	bucket := "micro-store-s3-" + uid
 	if err := s.Write(ctx, key, val, WriteBucket(bucket), ContentType("text/plain")); err != nil {
 		t.Fatal(err)
 	}
