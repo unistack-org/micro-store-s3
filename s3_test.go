@@ -6,9 +6,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/google/uuid"
 	"github.com/minio/minio-go/v7"
 	"github.com/unistack-org/micro/v3"
+	"github.com/unistack-org/micro/v3/util/id"
 )
 
 func TestStore(t *testing.T) {
@@ -54,7 +54,7 @@ func TestStore(t *testing.T) {
 	val := []byte("test")
 	key := "key"
 
-	bucket := "micro-store-s3-" + uuid.New().String()
+	bucket := "micro-store-s3-" + id.New()
 	if err := s.Write(ctx, key, val, WriteBucket(bucket), ContentType("text/plain")); err != nil {
 		t.Fatal(err)
 	}
