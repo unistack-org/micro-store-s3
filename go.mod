@@ -5,6 +5,6 @@ go 1.15
 require (
 	github.com/gabriel-vasile/mimetype v1.3.1
 	github.com/google/uuid v1.2.0
-	github.com/minio/minio-go/v7 v7.0.10
+	github.com/minio/minio-go/v7 v7.0.13
 	github.com/unistack-org/micro/v3 v3.3.17
 )
