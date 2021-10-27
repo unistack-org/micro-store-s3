@@ -7,8 +7,8 @@ import (
 	"testing"
 
 	"github.com/minio/minio-go/v7"
-	"github.com/unistack-org/micro/v3"
-	"github.com/unistack-org/micro/v3/util/id"
+	"go.unistack.org/micro/v3"
+	"go.unistack.org/micro/v3/util/id"
 )
 
 func TestStore(t *testing.T) {

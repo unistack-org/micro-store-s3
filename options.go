@@ -1,7 +1,7 @@
 package s3
 
 import (
-	"github.com/unistack-org/micro/v3/store"
+	"go.unistack.org/micro/v3/store"
 )
 
 type endpointKey struct{}

@@ -1,4 +1,4 @@
-package s3
+package s3 // import "go.unistack.org/micro-store-s3/v3"
 
 import (
 	"bytes"
@@ -15,7 +15,7 @@ import (
 	"github.com/gabriel-vasile/mimetype"
 	"github.com/minio/minio-go/v7"
 	creds "github.com/minio/minio-go/v7/pkg/credentials"
-	"github.com/unistack-org/micro/v3/store"
+	"go.unistack.org/micro/v3/store"
 )
 
 var keyRegex = regexp.MustCompile("[^a-zA-Z0-9]+")
