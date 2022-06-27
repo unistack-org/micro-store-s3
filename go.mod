@@ -7,5 +7,6 @@ require (
 	github.com/google/uuid v1.2.0 // indirect
 	github.com/minio/minio-go/v7 v7.0.29
 	github.com/stretchr/testify v1.7.0 // indirect
-	go.unistack.org/micro/v3 v3.9.8
+	go.unistack.org/micro/v3 v3.9.10
+	golang.org/x/net v0.0.0-20220225172249-27dd8689420f // indirect
 )
