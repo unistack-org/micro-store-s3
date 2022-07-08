@@ -131,7 +131,11 @@ func (s *s3Store) Read(ctx context.Context, key string, val interface{}, opts ..
 	}
 
 	key = keyRegex.ReplaceAllString(key, "-")
-
+	if s.opts.Timeout > 0 {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, s.opts.Timeout)
+		defer cancel()
+	}
 	rsp, err := s.client.GetObject(ctx, bucket, key, minio.GetObjectOptions{})
 	if verr, ok := err.(minio.ErrorResponse); ok && verr.StatusCode == http.StatusNotFound {
 		return store.ErrNotFound
@@ -207,7 +211,11 @@ func (s *s3Store) Write(ctx context.Context, key string, val interface{}, opts .
 		mputopts.ContentType = mime.String()
 		r = io.MultiReader(w, r)
 	}
-
+	if s.opts.Timeout > 0 {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, s.opts.Timeout)
+		defer cancel()
+	}
 	if ok, err := s.client.BucketExists(ctx, bucket); err != nil {
 		return err
 	} else if !ok {
@@ -236,7 +244,11 @@ func (s *s3Store) Delete(ctx context.Context, key string, opts ...store.DeleteOp
 	if bucket == "" {
 		bucket = options.Namespace
 	}
-
+	if s.opts.Timeout > 0 {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, s.opts.Timeout)
+		defer cancel()
+	}
 	if len(bucket) > 0 {
 		return s.client.RemoveObject(
 			ctx,                                   // context
@@ -265,7 +277,11 @@ func (s *s3Store) Exists(ctx context.Context, key string, opts ...store.ExistsOp
 	if bucket == "" {
 		bucket = options.Namespace
 	}
-
+	if s.opts.Timeout > 0 {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, s.opts.Timeout)
+		defer cancel()
+	}
 	_, err := s.client.StatObject(ctx, bucket, key, minio.StatObjectOptions{})
 	if verr, ok := err.(minio.ErrorResponse); ok && verr.StatusCode == http.StatusNotFound {
 		return store.ErrNotFound
@@ -290,7 +306,11 @@ func (s *s3Store) List(ctx context.Context, opts ...store.ListOption) ([]string,
 			recursive = v
 		}
 	}
-
+	if s.opts.Timeout > 0 {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, s.opts.Timeout)
+		defer cancel()
+	}
 	var names []string
 	for oinfo := range s.client.ListObjects(ctx, bucket, minio.ListObjectsOptions{Prefix: options.Prefix, Recursive: recursive}) {
 		names = append(names, oinfo.Key)

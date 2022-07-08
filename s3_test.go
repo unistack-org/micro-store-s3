@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"os"
+	"strings"
 	"testing"
 
 	"github.com/minio/minio-go/v7"
@@ -58,7 +59,9 @@ func TestStore(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	bucket := "micro-store-s3-" + uid
+
+	bucket := "micro-store-s3-" + strings.ToLower(uid)
+	t.Logf("bucket %s", bucket)
 	if err := s.Write(ctx, key, val, WriteBucket(bucket), ContentType("text/plain")); err != nil {
 		t.Fatal(err)
 	}
