@@ -326,3 +326,28 @@ func (s *s3Store) String() string {
 func (s *s3Store) Name() string {
 	return s.opts.Name
 }
+
+func (s *s3Store) Live() bool {
+	return s.connected
+}
+
+func (s *s3Store) Ready() bool {
+	return s.connected
+}
+
+func (s *s3Store) Health() bool {
+	return s.connected
+}
+
+func (s *s3Store) Watch(ctx context.Context, opts ...store.WatchOption) (store.Watcher, error) {
+	return &watcher{}, nil
+}
+
+type watcher struct{}
+
+func (w *watcher) Next() (store.Event, error) {
+	return nil, nil
+}
+
+func (w *watcher) Stop() {
+}
